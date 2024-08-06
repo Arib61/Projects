@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Soumettre une demande de stage</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+        * { box-sizing: border-box; }
+        body {
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+            max-width: 800px;
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            border-radius: 8px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 36px;
+            position: relative;
+            animation: slideInDown 0.5s ease-in-out;
+        }
+        @keyframes slideInDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        h2:before {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background-color: #2980b9;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #555;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #2980b9;
+            box-shadow: 0 0 8px rgba(41, 128, 185, 0.6);
+        }
+        .btn-primary {
+            background-color: #2980b9;
+            border-color: #2980b9;
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #1c5d8a;
+            transform: translateY(-3px);
+        }
+        .input-group-addon {
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-right: 0;
+            border-radius: 5px 0 0 5px;
+        }
+        .input-group .form-control {
+            border-radius: 0 5px 5px 0;
+        }
+        .input-group {
+            transition: transform 0.3s ease;
+        }
+        .input-group:hover {
+            transform: scale(1.02);
+        }
+
+        /* Additional Animations and Styles */
+        @keyframes backgroundAnimation {
+            0% { background-position: 0 0; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0 0; }
+        }
+        body {
+            background-size: 200% 200%;
+            animation: backgroundAnimation 10s ease infinite;
+        }
+        .container:before {
+            content: "";
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle at center, #fff, transparent);
+            transform: translateX(-50%);
+            z-index: -1;
+            opacity: 0.5;
+            animation: rotateBg 20s linear infinite;
+        }
+        @keyframes rotateBg {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
+        .form-container {
+            position: relative;
+        }
+        .form-container:before {
+            content: "";
+            position: absolute;
+            top: -10%;
+            right: -10%;
+            width: 200px;
+            height: 200px;
+            background: rgba(41, 128, 185, 0.2);
+            border-radius: 50%;
+            animation: scaleIn 5s infinite ease-in-out;
+        }
+        @keyframes scaleIn {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .form-container:after {
+            content: "";
+            position: absolute;
+            bottom: -10%;
+            left: -10%;
+            width: 200px;
+            height: 200px;
+            background: rgba(41, 128, 185, 0.2);
+            border-radius: 50%;
+            animation: scaleOut 5s infinite ease-in-out;
+        }
+        @keyframes scaleOut {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Soumettre une demande de stage</h2>
+        <form action="{% url 'soumettre_demande' stagiaire.id %}" method="post" class="form-horizontal" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="col-md-4 control-label">Date de soumission</label>
+                <div class="col-md-8 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        {{ form.date_soumission }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Domaine</label>
+                <div class="col-md-8 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
+                        {{ form.sujet }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Durée</label>
+                <div class="col-md-8 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                        {{ form.duree }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Type</label>
+                <div class="col-md-8 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                        {{ form.type }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Mode</label>
+                <div class="col-md-8 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-modal-window"></i></span>
+                        {{ form.mode }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">Lettre de Motivation</label>
+                <div class="col-md-8 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i></span>
+                        {{ form.lettre_motivation }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">CV</label>
+                <div class="col-md-8 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i></span>
+                        {{ form.cv }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">Soumettre <span class="glyphicon glyphicon-send"></span></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

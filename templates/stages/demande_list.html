@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Demandes</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
+
+        * { box-sizing: border-box; }
+        body {
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow-x: hidden;
+            color: #fff;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #222;
+            padding: 10px 20px;
+            color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .menu {
+            display: flex;
+            gap: 15px;
+        }
+        .menu .nav-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .menu .nav-item:hover { color: #fff; }
+        .menu .nav-item.active { color: #3498db; }
+        .menu .nav-item .icon { margin-right: 8px; }
+        .menu .nav-item .icon svg { width: 20px; height: 20px; }
+        .menu .nav-item .subicon {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: #fff;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .container {
+            margin-top: 30px;
+            padding: 30px;
+            max-width: 1200px;
+            background-color: white;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            border-radius: 8px;
+            animation: fadeIn 1s ease-in-out;
+            color: #2c3e50;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+        .search-form input {
+            border: 2px solid #3498db;
+            padding: 10px;
+            border-radius: 5px;
+            width: 80%;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .search-form input:focus {
+            border-color: #2980b9;
+            box-shadow: 0 0 8px rgba(41, 128, 185, 0.6);
+            outline: none;
+        }
+        .search-form button {
+            background-color: #3498db;
+            border-color: #3498db;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .search-form button:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+        }
+        ol {
+            list-style: none;
+            counter-reset: list;
+            padding: 0 1rem;
+        }
+        li {
+            --stop: calc(100% / var(--length) * var(--i));
+            --l: 62%;
+            --l2: 88%;
+            --h: calc((var(--i) - 1) * (180 / var(--length)));
+            --c1: hsl(var(--h), 71%, var(--l));
+            --c2: hsl(var(--h), 71%, var(--l2));
+            position: relative;
+            counter-increment: list;
+            max-width: 80rem;
+            margin: 2rem auto;
+            padding: 2rem 1rem 1rem;
+            box-shadow: 0.1rem 0.1rem 1.5rem rgba(0, 0, 0, 0.3);
+            border-radius: 0.25rem;
+            overflow: hidden;
+            background-color: white;
+            animation: slideInUp 0.5s ease-in-out;
+        }
+        @keyframes slideInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        li::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 1rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(to right, var(--c1) var(--stop), var(--c2) var(--stop));
+        }
+        h3 {
+            display: flex;
+            align-items: baseline;
+            margin: 0 0 1rem;
+            color: rgb(70 70 70);
+        }
+        h3::before {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 0 0 auto;
+            margin-right: 1rem;
+            width: 3rem;
+            height: 3rem;
+            content: counter(list);
+            padding: 1rem;
+            border-radius: 50%;
+            background-color: var(--c1);
+            color: white;
+        }
+        p { margin: 0.5rem 0; }
+        .btn-info {
+            background-color: #3498db;
+            border-color: #3498db;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-info:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+        }
+        @media (min-width: 40em) {
+            li {
+                margin: 3rem auto;
+                padding: 3rem 2rem 2rem;
+            }
+            h3 {
+                font-size: 2.25rem;
+                margin: 0 0 2rem;
+            }
+            h3::before {
+                margin-right: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <a href="{% url 'home' %}" class="nav-item active">
+                <span class="icon">
+                    <i data-feather="home"></i>
+                </span>
+                Home
+            </a>
+            <a href="{% url 'search_demands' %}" class="nav-item">
+                <span class="icon">
+                    <i data-feather="search"></i>
+                </span>
+                Search
+            </a>
+            <a href="#" class="nav-item">
+                <span class="icon">
+                    <span class="subicon">13</span>
+                    <i data-feather="bell"></i>
+                </span>
+                Notifications
+            </a>
+            <a href="{% url 'logout' %}" class="nav-item">
+                <span class="icon">
+                    <span class="subicon">1</span>
+                    <i data-feather="log-out"></i>
+                </span>
+                Logout
+            </a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <form class="search-form" action="{% url 'search_demands' %}" method="get">
+            <input type="text" name="search" class="form-control" placeholder="Rechercher une demande par nom de stagiaire" value="{{ query|default:'' }}">
+            <br><br>
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </form>
+
+        <div id="demand-list">
+            <ol style="--length: {{ demandes|length }}" role="list">
+                {% for demande in demandes %}
+                <li style="--i: {{ forloop.counter }}">
+                    <h3>Demande #{{ demande.id }}</h3>
+                    <p><strong>Date de Soumission :</strong> {{ demande.date_soumission }}</p>
+                    <p><strong>Statut :</strong> {{ demande.get_statut_display }}</p>
+                    <p><strong>Sujet :</strong> {{ demande.sujet }}</p>
+                    <p><strong>Durée :</strong> {{ demande.duree }}</p>
+                    <p><strong>Type :</strong> {{ demande.get_type_display }}</p>
+                    <p><strong>Mode :</strong> {{ demande.get_mode_display }}</p>
+                    <p><strong>Stagiaire :</strong> {{ demande.stagiaire.nom }} {{ demande.stagiaire.prenom }}</p>
+                    <br>
+                    <a href="{% url 'demande_detail' demande.id %}" class="btn btn-info">Détails</a>
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>

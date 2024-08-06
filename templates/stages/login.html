@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion RH et Soumission de Demande Stagiaire</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+        * { box-sizing: border-box; }
+        body {
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            margin: -20px 0 50px;
+            position: relative;
+        }
+        h1 { font-weight: bold; margin: 0; }
+        h2 { text-align: center; margin-bottom: 20px; }
+        p { font-size: 14px; font-weight: 100; line-height: 20px; letter-spacing: 0.5px; margin: 20px 0 30px; }
+        span { font-size: 12px; }
+        a { color: #333; font-size: 14px; text-decoration: none; margin: 15px 0; }
+        button {
+            border-radius: 20px;
+            border: 1px solid #2980b9;
+            background-color: #2980b9;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+        }
+        button:active { transform: scale(0.95); }
+        button:focus { outline: none; }
+        button.ghost { background-color: transparent; border-color: #FFFFFF; }
+        form {
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: center;
+        }
+        input {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+        }
+        select {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            position: relative;
+            overflow: hidden;
+            width: 768px;
+            max-width: 100%;
+            min-height: 480px;
+        }
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s ease-in-out;
+        }
+        .sign-in-container { left: 0; width: 50%; z-index: 2; }
+        .container.right-panel-active .sign-in-container { transform: translateX(100%); }
+        .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; }
+        .container.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: show 0.6s;
+        }
+        @keyframes show {
+            0%, 49.99% { opacity: 0; z-index: 1; }
+            50%, 100% { opacity: 1; z-index: 5; }
+        }
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+        .container.right-panel-active .overlay-container { transform: translateX(-100%); }
+        .overlay {
+            background: #34495e;
+            background: -webkit-linear-gradient(to right, #34495e, #2c3e50);
+            background: linear-gradient(to right, #34495e, #2c3e50);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 0 0;
+            color: #FFFFFF;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+        .container.right-panel-active .overlay { transform: translateX(50%); }
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+        .overlay-left { transform: translateX(-20%); }
+        .container.right-panel-active .overlay-left { transform: translateX(0); }
+        .overlay-right { right: 0; transform: translateX(0); }
+        .container.right-panel-active .overlay-right { transform: translateX(20%); }
+        .social-container { margin: 20px 0; }
+        .social-container a {
+            border: 1px solid #DDDDDD;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            height: 40px;
+            width: 40px;
+        }
+        footer {
+            background-color: #222;
+            color: #fff;
+            font-size: 14px;
+            bottom: 0;
+            position: fixed;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 999;
+        }
+        footer p { margin: 10px 0; }
+        footer i { color: rgb(225, 139, 139); }
+        footer a { color: #3c97bf; text-decoration: none; }
+
+        /* Animated Title */
+        .animated-title {
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+            color: #FFFFFF;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: colorChange 3s infinite;
+        }
+        .animated-title span {
+            display: inline-block;
+            animation: bounce 1.5s infinite;
+        }
+        .animated-title span:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+        .animated-title span:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes colorChange {
+            0% { color: #FFFFFF; }
+            50% { color: #41b6ff; }
+            100% { color: #FFFFFF; }
+        }
+        .a{
+            font-size: 36px;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.1;
+            z-index: 0;
+            width: 50%;
+            height: auto;
+        }
+    </style>
+   
+</head>
+<body>
+    <h1 class="animated-title" >
+         <span class="a">Bienvenue</span>  <span class="a">dans</span>  <span class="a">la</span>  <span class="a">plateforme</span>  <span class="a">de</span>  <span class="a">gestion</span>  <span class="a">de</span> <span class="a">stagiaire</span>
+        <br><br>
+    </h1>
+    <div class="container" id="container">
+        <div class="form-container sign-in-container">
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <h1>Connexion </h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>ou utilisez votre compte</span>
+                <input type="text" name="username" placeholder="Nom d'utilisateur" required/>
+                <input type="password" name="password" placeholder="Mot de passe" required/>
+                <select name="user_type" required>
+                    <option value="RH">RH</option>
+                    <option value="Responsable">Responsable</option>
+                </select>
+                <a href="#">Mot de passe oublié ?</a>
+                <button type="submit">Connexion</button>
+                {% if error %}
+                <p style="color: red;">{{ error }}</p>
+                {% endif %}
+            </form>
+        </div>
+        <div class="form-container sign-up-container">
+            <form action="{% url 'soumettre_stagiaire' %}" method="get">
+                <h1 style="font-size: 26px;">Soumettre votre Demande de stage</h1>
+                <br><br>
+                <button type="submit">Soumettre une Demande</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Bon Retour !</h1>
+                    <p>Pour rester connecté avec nous, veuillez vous connecter avec vos informations personnelles</p>
+                    <button class="ghost" id="signIn">Connexion</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Bonjour,</h1>
+                    <p>Entrez vos détails personnels et commencez votre voyage avec nous</p>
+                    <button class="ghost" id="signUp">Soumettre une Demande</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cursor"></div>
+    <img src="C:/Stage/Gestion_stagiere/gestion_stagiaires/Screenshot_2024-07-28_130328-removebg-preview.png" alt="ANEP Logo" class="watermark">
+
+    <script>
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+
+        signUpButton.addEventListener('click', () => {
+            container.classList.add("right-panel-active");
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove("right-panel-active");
+        });
+    </script>
+</body>
+</html>

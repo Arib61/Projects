@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détail de la Demande</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            overflow-x: hidden;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #222;
+            padding: 10px 20px;
+            color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .navbar .menu {
+            display: flex;
+            gap: 15px;
+        }
+        .menu .nav-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .menu .nav-item:hover {
+            color: #fff;
+        }
+        .menu .nav-item.active {
+            color: #3498db;
+        }
+        .menu .nav-item .icon {
+            margin-right: 8px;
+        }
+        .menu .nav-item .icon svg {
+            width: 20px;
+            height: 20px;
+        }
+        .menu .nav-item .subicon {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: #fff;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+            max-width: 800px;
+            margin: 100px auto;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 36px;
+            position: relative;
+            animation: slideInDown 0.5s ease-in-out;
+        }
+        @keyframes slideInDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        h2:before {
+            content: "";
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: #2980b9;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        p {
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn {
+            margin-right: 10px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-3px);
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="menu">
+            <a href="{% url 'home' %}" class="nav-item active">
+                <span class="icon">
+                    <i data-feather="home"></i>
+                </span>
+                Home
+            </a>
+            <a href="#" class="nav-item">
+                <span class="icon">
+                    <i data-feather="search"></i>
+                </span>
+                Search
+            </a>
+            <a href="#" class="nav-item">
+                <span class="icon">
+                    <span class="subicon">13</span>
+                    <i data-feather="bell"></i>
+                </span>
+                Notifications
+            </a>
+            <a href="{% url 'demande_list' %}" class="nav-item">
+                <span class="icon">
+                    <i data-feather="star"></i>
+                </span>
+                Liste des demandes
+            </a>
+            <a href="{% url 'demande_list_accepte' %}" class="nav-item">
+                <span class="icon">
+                    <i data-feather="star"></i>
+                </span>
+                Liste des demandes validées
+            </a>
+            <a href="{% url 'logout' %}" class="nav-item">
+                <span class="icon">
+                    <span class="subicon">1</span>
+                    <i data-feather="log-out"></i>
+                </span>
+                Logout
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Détail de la Demande</h2>
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        <p><strong>ID :</strong> {{ demande.id }}</p>
+        <p><strong>Date de Soumission :</strong> {{ demande.date_soumission }}</p>
+        <p><strong>Statut :</strong> {{ demande.get_statut_display }}</p>
+        <p><strong>Sujet :</strong> {{ demande.sujet }}</p>
+        <p><strong>Lettre de Motivation :</strong> <a href="{{ demande.lettre_motivation.url }}">Télécharger</a></p>
+        <p><strong>CV :</strong> <a href="{{ demande.cv.url }}">Télécharger</a></p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="departement">Envoyer la demande au responsable concerné: </label>
+            </div>
+            <button type="submit" name="action" value="valider" class="btn btn-primary">Envoyer au Responsable</button>
+            <br><br>
+            <div class="form-group">
+                <label for="raison_refus">Raison du refus (si refusé):</label>
+                <textarea id="raison_refus" name="raison_refus" class="form-control" rows="4"></textarea>
+            </div>
+            <button type="submit" name="action" value="refuser" class="btn btn-danger">Refuser</button>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>
